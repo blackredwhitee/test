@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Калькулятор стоимости услуг — ООО «Бизнес Сервис»</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">ООО «Бизнес Сервис» · Бухгалтерские услуги</div>
+      <h1 class="hero-title">Калькулятор<br>стоимости услуг</h1>
+      <p class="hero-sub">Выберите нужные услуги, ответьте на несколько вопросов — система рассчитает стоимость, сформирует коммерческое предложение и договор.</p>
+      <button class="btn btn-hero" onclick="scrollToForm()">Начать расчёт</button>
+    </div>
+    <div class="hero-decoration" aria-hidden="true">
+      <div class="deco-card">
+        <span class="deco-label">КП и договор</span>
+        <span class="deco-value">скачать файлом</span>
+      </div>
+      <div class="deco-card">
+        <span class="deco-label">Услуг в каталоге</span>
+        <span class="deco-value">13 позиций</span>
+      </div>
+      <div class="deco-card">
+        <span class="deco-label">История заявок</span>
+        <span class="deco-value">в браузере</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRESS STEPS -->
+  <div class="progress-bar" id="progress-bar">
+    <div class="progress-inner">
+      <div class="progress-step active" data-step="1" onclick="scrollToId('step-client')">
+        <span class="ps-num">1</span><span class="ps-label">Клиент</span>
+      </div>
+      <div class="progress-line"></div>
+      <div class="progress-step" data-step="2" onclick="scrollToId('step-services')">
+        <span class="ps-num">2</span><span class="ps-label">Услуги</span>
+      </div>
+      <div class="progress-line"></div>
+      <div class="progress-step" data-step="3" onclick="scrollToId('step-params')">
+        <span class="ps-num">3</span><span class="ps-label">Параметры</span>
+      </div>
+      <div class="progress-line"></div>
+      <div class="progress-step" data-step="4" id="ps-kp">
+        <span class="ps-num">4</span><span class="ps-label">КП</span>
+      </div>
+      <div class="progress-line"></div>
+      <div class="progress-step" data-step="5" id="ps-contract">
+        <span class="ps-num">5</span><span class="ps-label">Договор</span>
+      </div>
+      <div class="progress-line"></div>
+      <div class="progress-step" data-step="6" onclick="scrollToId('section-history')">
+        <span class="ps-num">6</span><span class="ps-label">История</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div class="app-layout" id="form-section">
+
+    <!-- LEFT: FORM -->
+    <main class="form-column">
+
+      <!-- VALIDATION ERROR BANNER -->
+      <div class="error-banner" id="error-banner" style="display:none;">
+        <div class="error-banner-icon">!</div>
+        <div id="error-banner-text"></div>
+      </div>
+
+      <!-- STEP 1: Client info -->
+      <section class="card" id="step-client">
+        <div class="card-header">
+          <span class="step-num">01</span>
+          <div>
+            <h2 class="card-title">Данные клиента</h2>
+            <p class="card-desc">Заполните информацию о компании или физическом лице</p>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field form-field--full">
+            <label class="field-label" for="client-name">Название компании / ФИО <span class="req">*</span></label>
+            <input class="field-input" type="text" id="client-name" placeholder="ООО «Ромашка» или Иванов Иван Иванович" />
+            <span class="field-error" id="err-client-name"></span>
+          </div>
+          <div class="form-field">
+            <label class="field-label" for="client-inn">ИНН</label>
+            <input class="field-input" type="text" id="client-inn" placeholder="7700000000" maxlength="12" />
+          </div>
+          <div class="form-field">
+            <label class="field-label" for="client-contact">Контактное лицо <span class="req">*</span></label>
+            <input class="field-input" type="text" id="client-contact" placeholder="Имя и должность" />
+            <span class="field-error" id="err-client-contact"></span>
+          </div>
+          <div class="form-field">
+            <label class="field-label" for="client-phone">Телефон <span class="req">*</span></label>
+            <input class="field-input" type="tel" id="client-phone" placeholder="+7 (___) ___-__-__" />
+            <span class="field-error" id="err-client-phone"></span>
+          </div>
+          <div class="form-field">
+            <label class="field-label" for="client-email">Email <span class="req">*</span></label>
+            <input class="field-input" type="email" id="client-email" placeholder="email@company.ru" />
+            <span class="field-error" id="err-client-email"></span>
+          </div>
+          <div class="form-field form-field--full">
+            <label class="field-label">Тип клиента <span class="req">*</span></label>
+            <div class="type-group" id="client-type-group">
+              <label class="type-btn"><input type="radio" name="client-type" value="ИП" /><span>ИП</span></label>
+              <label class="type-btn"><input type="radio" name="client-type" value="ООО" checked /><span>ООО</span></label>
+              <label class="type-btn"><input type="radio" name="client-type" value="Самозанятый" /><span>Самозанятый</span></label>
+              <label class="type-btn"><input type="radio" name="client-type" value="Физическое лицо" /><span>Физ. лицо</span></label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2: Services -->
+      <section class="card" id="step-services">
+        <div class="card-header">
+          <span class="step-num">02</span>
+          <div>
+            <h2 class="card-title">Выбор услуг <span class="req">*</span></h2>
+            <p class="card-desc">Отметьте нужные позиции — стоимость обновится автоматически</p>
+          </div>
+        </div>
+        <span class="field-error" id="err-services" style="display:block;margin-bottom:12px;"></span>
+
+        <div class="services-group">
+          <h3 class="services-cat">Бухгалтерское сопровождение</h3>
+          <div class="service-list">
+            <label class="service-item">
+              <input type="checkbox" class="service-check" data-id="null-reporting" data-price="5000" data-name="Нулевая отчётность" />
+              <div class="service-info"><span class="service-name">Нулевая отчётность</span></div>
+              <span class="service-price">5 000 ₽</span>
+            </label>
+            <label class="service-item">
+              <input type="checkbox" class="service-check" data-id="accounting-ip" data-price="12000" data-name="Бухгалтерское сопровождение ИП" />
+              <div class="service-info"><span class="service-name">Бухгалтерское сопровождение ИП</span><span class="service-period">/ месяц</span></div>
+              <span class="service-price">12 000 ₽</span>
+            </label>
+            <label class="service-item">
+              <input type="checkbox" class="service-check" data-id="accounting-ooo" data-price="20000" data-name="Бухгалтерское сопровождение ООО" />
+              <div class="service-info"><span class="service-name">Бухгалтерское сопровождение ООО</span><span class="service-period">/ месяц</span></div>
+              <span class="service-price">20 000 ₽</span>
+            </label>
+            <label class="service-item">
+              <input type="checkbox" class="service-check" data-id="salary" data-price="1500" data-name="Ведение зарплатного проекта" data-per-employee="true" />
+              <div class="service-info"><span class="service-name">Ведение зарплатного проекта</span><span class="service-period">1 500 ₽ / сотрудник</span></div>
+              <span class="service-price salary-price">1 500 ₽</span>
+            </label>
+            <label class="service-item">
+              <input type="checkbox" class="service-check" data-id="reporting" data-price="8000" data-name="Подготовка и сдача отчётности" />
+              <div class="service-info"><span class="service-name">Подготовка и сдача отчётности</span></div>
+              <span class="service-price">8 000 ₽</span>
+            </label>
+            <label class="service-item">
+              <input type="checkbox" class="service-check" data-id="restore" data-price="30000" data-name="Восстановление учёта" />
+              <div class="service-info"><span class="service-name">Восстановление учёта</span><span class="service-period">от</span></div>
+              <span class="service-price">30 000 ₽</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="services-group">
+          <h3 class="services-cat">Налоги и консультации</h3>
+          <div class="service-list">
+            <label class="service-item">
+              <input type="checkbox" class="service-check" data-id="tax-consult" data-price="5000" data-name="Налоговая консультация" />
+              <div class="service-info"><span class="service-name">Налоговая консультация</span></div>
+              <span class="service-price">5 000 ₽</span>
+            </label>
+            <label class="service-item">
+              <input type="checkbox" class="service-check" data-id="tax-analysis" data-price="15000" data-name="Анализ налоговой нагрузки" />
+              <div class="service-info"><span class="service-name">Анализ налоговой нагрузки</span></div>
+              <span class="service-price">15 000 ₽</span>
+            </label>
+            <label class="service-item">
+              <input type="checkbox" class="service-check" data-id="tax-system" data-price="10000" data-name="Подбор системы налогообложения" />
+              <div class="service-info"><span class="service-name">Подбор системы налогообложения</span></div>
+              <span class="service-price">10 000 ₽</span>
+            </label>
+            <label class="service-item">
+              <input type="checkbox" class="service-check" data-id="tax-audit" data-price="40000" data-name="Сопровождение налоговой проверки" />
+              <div class="service-info"><span class="service-name">Сопровождение налоговой проверки</span></div>
+              <span class="service-price">40 000 ₽</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="services-group">
+          <h3 class="services-cat">Документы и договоры</h3>
+          <div class="service-list">
+            <label class="service-item">
+              <input type="checkbox" class="service-check" data-id="primary-docs" data-price="7000" data-name="Подготовка первичных документов" />
+              <div class="service-info"><span class="service-name">Подготовка первичных документов</span></div>
+              <span class="service-price">7 000 ₽</span>
+            </label>
+            <label class="service-item">
+              <input type="checkbox" class="service-check" data-id="contract-check" data-price="10000" data-name="Проверка договоров (бухгалтерская)" />
+              <div class="service-info"><span class="service-name">Проверка договоров</span><span class="service-period">с точки зрения бухгалтерии</span></div>
+              <span class="service-price">10 000 ₽</span>
+            </label>
+            <label class="service-item">
+              <input type="checkbox" class="service-check" data-id="acts" data-price="5000" data-name="Подготовка актов, счетов, УПД" />
+              <div class="service-info"><span class="service-name">Подготовка актов, счетов, УПД</span></div>
+              <span class="service-price">5 000 ₽</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 3: Parameters -->
+      <section class="card" id="step-params">
+        <div class="card-header">
+          <span class="step-num">03</span>
+          <div>
+            <h2 class="card-title">Параметры расчёта</h2>
+            <p class="card-desc">Уточните детали — это влияет на итоговую стоимость</p>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label class="field-label" for="employees">Количество сотрудников</label>
+            <input class="field-input" type="number" id="employees" min="0" placeholder="0" value="0" />
+          </div>
+          <div class="form-field">
+            <label class="field-label" for="operations">Операций в месяц</label>
+            <input class="field-input" type="number" id="operations" min="0" placeholder="0" value="0" />
+            <span class="field-hint">&gt;100 → +20%, &gt;300 → +40%</span>
+          </div>
+          <div class="form-field form-field--full">
+            <label class="field-label">Срочность</label>
+            <div class="toggle-group">
+              <label class="toggle-btn"><input type="radio" name="urgency" value="no" checked /><span>Без срочности</span></label>
+              <label class="toggle-btn"><input type="radio" name="urgency" value="yes" /><span>Срочно <em>+30%</em></span></label>
+            </div>
+          </div>
+          <div class="form-field form-field--full">
+            <label class="field-label">Личный менеджер</label>
+            <div class="toggle-group">
+              <label class="toggle-btn"><input type="radio" name="manager" value="no" checked /><span>Не нужен</span></label>
+              <label class="toggle-btn"><input type="radio" name="manager" value="yes" /><span>Нужен <em>+10 000 ₽</em></span></label>
+            </div>
+          </div>
+          <div class="form-field form-field--full">
+            <label class="field-label">Формат работы <span class="req">*</span></label>
+            <div class="toggle-group">
+              <label class="toggle-btn"><input type="radio" name="format" value="Разовая услуга" checked /><span>Разовая услуга</span></label>
+              <label class="toggle-btn"><input type="radio" name="format" value="Ежемесячное сопровождение" /><span>Ежемесячное сопровождение</span></label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GENERATE BUTTONS -->
+      <div class="generate-row">
+        <button class="btn btn-primary btn-large" id="btn-generate" onclick="generateProposal()">
+          ✦ Сформировать КП
+        </button>
+        <button class="btn btn-ghost" onclick="resetAll()">Сбросить расчёт</button>
+      </div>
+
+      <!-- STEP 4: KP RESULT -->
+      <section class="card result-card" id="result-kp" style="display:none;">
+        <div class="card-header">
+          <span class="step-num step-num--green">КП</span>
+          <div>
+            <h2 class="card-title">Коммерческое предложение</h2>
+            <p class="card-desc" id="kp-meta"></p>
+          </div>
+        </div>
+
+        <!-- Save notice -->
+        <div class="save-notice" id="save-notice">
+          <span class="save-notice-icon">✓</span>
+          <div>
+            <strong>Заявка сохранена в истории.</strong>
+            В рабочей версии она может отправляться в Google Forms, на почту, в CRM или Telegram-чат менеджера.
+          </div>
+        </div>
+
+        <div class="kp-body" id="kp-body"></div>
+
+        <div class="result-actions">
+          <button class="btn btn-primary" onclick="downloadKP()">⬇ Скачать КП повторно</button>
+          <button class="btn btn-secondary" onclick="copyKP()">Скопировать КП</button>
+          <button class="btn btn-accent" id="btn-goto-contract" onclick="generateContract()">→ Перейти к договору</button>
+        </div>
+      </section>
+
+      <!-- STEP 5: CONTRACT RESULT -->
+      <section class="card result-card" id="result-contract-full" style="display:none;">
+        <div class="card-header">
+          <span class="step-num step-num--indigo">ДОГ</span>
+          <div>
+            <h2 class="card-title">Договор оказания услуг</h2>
+            <p class="card-desc" id="contract-meta"></p>
+          </div>
+        </div>
+        <div class="kp-body" id="contract-body"></div>
+        <div class="result-actions">
+          <button class="btn btn-primary" onclick="downloadContract()">⬇ Скачать договор повторно</button>
+          <button class="btn btn-secondary" onclick="copyContract()">Скопировать договор</button>
+        </div>
+      </section>
+
+      <!-- INTEGRATION INFO -->
+      <section class="card integration-card" id="integration-info" style="display:none;">
+        <div class="card-header">
+          <span class="step-num step-num--amber">→</span>
+          <div>
+            <h2 class="card-title">Куда отправлять заявки в рабочей версии</h2>
+            <p class="card-desc">В MVP заявки сохраняются в истории браузера через localStorage</p>
+          </div>
+        </div>
+        <div class="integration-grid">
+          <div class="integration-item">
+            <div class="int-icon">📊</div>
+            <div class="int-name">Google Forms / Sheets</div>
+            <div class="int-desc">Автосбор данных в таблицу</div>
+          </div>
+          <div class="integration-item">
+            <div class="int-icon">📧</div>
+            <div class="int-name">Email менеджеру</div>
+            <div class="int-desc">Письмо при каждой заявке</div>
+          </div>
+          <div class="integration-item">
+            <div class="int-icon">✈️</div>
+            <div class="int-name">Telegram-бот</div>
+            <div class="int-desc">Уведомление в чат менеджера</div>
+          </div>
+          <div class="integration-item">
+            <div class="int-icon">🗂️</div>
+            <div class="int-name">CRM-система</div>
+            <div class="int-desc">amoCRM, Битрикс24 и др.</div>
+          </div>
+          <div class="integration-item">
+            <div class="int-icon">⚙️</div>
+            <div class="int-name">Внутренняя панель</div>
+            <div class="int-desc">Собственный бэкенд</div>
+          </div>
+        </div>
+        <p class="integration-note">Для боевой версии потребуется подключение backend или интеграция с внешним сервисом.</p>
+      </section>
+
+    </main>
+
+    <!-- RIGHT: STICKY TOTAL -->
+    <aside class="total-sidebar" id="total-sidebar">
+      <div class="total-card">
+        <div class="total-header">Итого к оплате</div>
+        <div class="total-amount" id="total-display">0 ₽</div>
+        <div class="total-breakdown" id="total-breakdown">
+          <p class="breakdown-empty">Выберите услуги для расчёта</p>
+        </div>
+        <div class="total-divider"></div>
+        <div class="total-meta" id="total-meta"></div>
+        <button class="btn btn-primary btn-full" onclick="generateProposal()">Сформировать КП</button>
+        <button class="btn btn-ghost btn-full" onclick="resetAll()">Сбросить</button>
+      </div>
+    </aside>
+  </div>
+
+  <!-- HISTORY SECTION -->
+  <section class="history-section" id="section-history">
+    <div class="history-inner">
+      <div class="history-header">
+        <div>
+          <h2 class="history-title">История заявок</h2>
+          <p class="history-sub">Данные хранятся в вашем браузере и не передаются на сервер</p>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="clearHistory()">Очистить историю</button>
+      </div>
+      <div id="history-empty" class="history-empty">
+        Заявок пока нет. Сформируйте коммерческое предложение, чтобы оно появилось здесь.
+      </div>
+      <div class="history-table-wrap" id="history-table-wrap" style="display:none;">
+        <table class="history-table" id="history-table">
+          <thead>
+            <tr>
+              <th>Заявка</th>
+              <th>Дата</th>
+              <th>Клиент</th>
+              <th>Тип</th>
+              <th>Сумма</th>
+              <th>Статус</th>
+              <th>Действия</th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOBILE STICKY BOTTOM -->
+  <div class="mobile-total" id="mobile-total">
+    <div class="mobile-total-inner">
+      <div>
+        <div class="mobile-total-label">Итого</div>
+        <div class="mobile-total-amount" id="mobile-total-display">0 ₽</div>
+      </div>
+      <button class="btn btn-primary" onclick="generateProposal()">Сформировать КП</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
